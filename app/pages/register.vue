@@ -27,8 +27,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         method: 'POST',
         body: event.data
     })
-    fetch()
     toast.add({ title: 'Success', description: 'The form has been submitted.', color: 'success' })
+    fetch()
   } catch (error) {
     if (error instanceof FetchError) {
         toast.add({ title: 'Error', description: error.data.message, color: 'error' })
