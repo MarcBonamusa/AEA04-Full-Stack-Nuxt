@@ -6,33 +6,33 @@ import { FetchError } from 'ofetch'
 const { loggedIn, user, session, fetch, clear, openInPopup } = useUserSession();
 
 const schema = z.object({
-  email: z.string().email('Invalid email'),
-  password: z.string().min(8, 'Must be at least 8 characters')
+    email: z.string().email('Invalid email'),
+    password: z.string().min(8, 'Must be at least 8 characters')
 })
 
 type Schema = z.output<typeof schema>
 
 const state = reactive<Partial<Schema>>({
-  email: undefined,
-  password: undefined
+    email: undefined,
+    password: undefined
 })
 
 const toast = useToast()
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  try {
-    await $fetch('/auth/login', {
-        method: 'POST',
-        body: event.data
-    })
-    toast.add({ title: 'Success', description: 'Login amb exit.', color: 'success' })
-    fetch()
-  } catch (error) {
-    if (error instanceof FetchError) {
-        toast.add({ title: 'Error', description: error.data.message, color: 'error' })
-    } else {
-        toast.add({ title: 'Error', description: "Error a l'aplicació", color: 'error' })
+    try {
+        await $fetch('/auth/login', {
+            method: 'POST',
+            body: event.data
+        })
+        toast.add({ title: 'Success', description: 'Login amb exit.', color: 'success' })
+        fetch()
+    } catch (error) {
+        if (error instanceof FetchError) {
+            toast.add({ title: 'Error', description: error.data.message, color: 'error' })
+        } else {
+            toast.add({ title: 'Error', description: "Error a l'aplicació", color: 'error' })
+        }
     }
-  }
 }
 
 watch(loggedIn, () => {
@@ -50,11 +50,11 @@ watch(loggedIn, () => {
         </template>
         <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
             <UFormField label="Email" name="email">
-                <UInput v-model="state.email" class="w-full"/>
+                <UInput v-model="state.email" class="w-full" />
             </UFormField>
 
             <UFormField label="Password" name="password">
-                <UInput v-model="state.password" type="password" class="w-full"/>
+                <UInput v-model="state.password" type="password" class="w-full" />
             </UFormField>
 
             <UButton type="submit">
@@ -64,5 +64,13 @@ watch(loggedIn, () => {
         <UButton type="submit" class="mt-4" @click="openInPopup('/auth/github')">
             Login with Github
         </UButton>
+
+        <p class="mt-6 text-sm text-center text-gray-500 dark:text-gray-400">
+            Si no tens compte,
+            <NuxtLink to="/register" class="text-primary-500 font-medium hover:underline">
+                registra't aquí
+            </NuxtLink>
+        </p>
+
     </UCard>
 </template>

@@ -71,5 +71,13 @@ watch(loggedIn, () => {
         <UButton type="submit" class="mt-4" @click="openInPopup('/auth/github')">
             Register with Github
         </UButton>
+
+        <p class="mt-6 text-sm text-center text-gray-500 dark:text-gray-400">
+            Si ja tens compte, 
+            <NuxtLink to="/login" class="text-primary-500 font-medium hover:underline">
+                entra aquí
+            </NuxtLink>
+        </p>
+
     </UCard>
 </template>
