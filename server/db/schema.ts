@@ -9,7 +9,7 @@ export const users = sqliteTable("users", {
 });
 
 export const golejadors = sqliteTable("golejadors", {
-  id: integer("id").primaryKey(),
+  id: integer("id").primaryKey({ autoIncrement: true }), 
   name: text("name"),
   team: text("team"),
   goals: integer("goals"),
