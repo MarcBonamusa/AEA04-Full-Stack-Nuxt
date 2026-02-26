@@ -36,7 +36,7 @@ onMounted(() => {
 
 async function onSubmit(event) {
   if (!id) {
-    toast.add({ title: 'Falta l\'ID', description: 'Torna a l\'admin i selecciona un jugador.', color: 'red' });
+    toast.add({ title: 'Falta l ID', description: 'Selecciona un jugador.', color: 'error' });
     return;
   }
 
@@ -46,11 +46,11 @@ async function onSubmit(event) {
       body: event.data
     });
 
-    toast.add({ title: 'Modificat correctament!', color: 'green' });
+    toast.add({ title: 'Modificat correctament', color: 'success' });
     navigateTo('/admin');
 
   } catch (error) {
-    toast.add({ title: 'Error al modificar', color: 'red' });
+    toast.add({ title: 'Error al modificar', color: 'error' });
   }
 }
 </script>
@@ -58,24 +58,17 @@ async function onSubmit(event) {
 <template>
   <div class="p-6">
     <UCard class="max-w-md mx-auto my-10">
-      
+
       <template #header>
         <h1 class="text-2xl text-center font-bold">Modificar Golejador</h1>
       </template>
 
-      <div v-if="!id" class="text-center py-6 text-orange-500 font-medium">
-        Si us plau, selecciona un jugador des de la llista d'Administració per poder-lo modificar.
-        <UButton as-child color="gray" variant="soft" class="mt-4 block mx-auto w-fit">
-          <NuxtLink to="/admin">Tornar a l'Admin</NuxtLink>
-        </UButton>
-      </div>
+      <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
 
-      <UForm v-else :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-        
         <UFormField label="Nom" name="name">
           <UInput v-model="state.name" class="w-full" />
         </UFormField>
-        
+
         <UFormField label="Equip" name="team">
           <UInput v-model="state.team" class="w-full" />
         </UFormField>
@@ -85,11 +78,11 @@ async function onSubmit(event) {
         </UFormField>
 
         <div class="flex gap-4 mt-8">
-          <UButton type="submit" color="primary" class="flex-1 justify-center">
-            Actualitzar
+          <UButton type="submit" class="flex-1 justify-center">
+            Guardar
           </UButton>
-          
-          <UButton as-child color="gray" variant="soft" class="flex-1 justify-center">
+
+          <UButton as-child class="flex-1 justify-center">
             <NuxtLink to="/admin">Cancel·lar</NuxtLink>
           </UButton>
         </div>

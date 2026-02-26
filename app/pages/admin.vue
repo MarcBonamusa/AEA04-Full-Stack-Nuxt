@@ -10,10 +10,10 @@ const { data: jugadors, refresh } = await useFetch("/api/golejadors");
 async function eliminarGolejador(id) {
   try {
     await $fetch(`/api/golejadors?id=${id}`, { method: 'DELETE' });
-    toast.add({ title: 'Golejador eliminat', color: 'orange' });
+    toast.add({ title: 'Golejador eliminat', color: 'success' });
     refresh();
   } catch (error) {
-    toast.add({ title: 'Error al eliminar', color: 'red' });
+    toast.add({ title: 'Error al eliminar', color: 'error' });
   }
 }
 </script>
@@ -34,24 +34,21 @@ async function eliminarGolejador(id) {
       </template>
 
       <div v-if="jugadors && jugadors.length > 0" class="space-y-4">
-        <div v-for="jugador in jugadors" :key="jugador.id" class="flex justify-between items-center border-b pb-4 dark:border-gray-800">
-          
+        <div v-for="jugador in jugadors" :key="jugador.id"
+          class="flex justify-between items-center border-b pb-4 dark:border-gray-800">
+
           <div>
             <p class="font-bold text-lg">{{ jugador.name }}</p>
             <p class="text-gray-500">{{ jugador.team }} - {{ jugador.goals }} gols</p>
           </div>
-          
+
           <div class="flex gap-2">
             <UButton as-child>
               <NuxtLink :to="`/modificar?id=${jugador.id}`">Modificar</NuxtLink>
             </UButton>
 
-            <UButton 
-              color="red" 
-              variant="ghost" 
-              icon="i-heroicons-trash" 
-              @click="eliminarGolejador(jugador.id)" 
-            />
+            <UButton icon="i-heroicons-trash" style="cursor: pointer;"
+              @click="eliminarGolejador(jugador.id)" />
           </div>
 
         </div>

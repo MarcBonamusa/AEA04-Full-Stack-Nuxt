@@ -26,12 +26,12 @@ async function onSubmit(event) {
       body: event.data
     });
 
-    toast.add({ title: 'Golejador afegit correctament!', color: 'green' });
+    toast.add({ title: 'Golejador afegit correctament!', color: 'success' });
 
     navigateTo('/admin');
 
   } catch (error) {
-    toast.add({ title: 'Error al crear el registre', color: 'red' });
+    toast.add({ title: 'Error al crear el registre', color: 'error' });
   }
 }
 </script>
@@ -39,19 +39,19 @@ async function onSubmit(event) {
 <template>
   <div class="p-6">
     <UCard class="max-w-md mx-auto my-10">
-      
+
       <template>
         <h1 class="text-2xl text-center font-bold">Crear Golejador</h1>
       </template>
 
       <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-        
+
         <UFormField label="Nom" name="name">
           <UInput v-model="state.name" class="w-full" placeholder="Ex: Lamine Yamal" />
         </UFormField>
-        
+
         <UFormField label="Equip" name="team">
-          <UInput v-model="state.team" class="w-full" placeholder="Ex: FC Barcelona" />
+          <UInput v-model="state.team" class="w-full" placeholder="Ex: Barcelona" />
         </UFormField>
 
         <UFormField label="Gols totals" name="goals">
@@ -59,11 +59,11 @@ async function onSubmit(event) {
         </UFormField>
 
         <div class="flex gap-4 mt-8">
-          <UButton type="submit" color="primary" class="flex-1 justify-center">
+          <UButton type="submit" class="flex-1 justify-center">
             Guardar
           </UButton>
-          
-          <UButton as-child color="gray" variant="soft" class="flex-1 justify-center">
+
+          <UButton as-child class="flex-1 justify-center">
             <NuxtLink to="/admin">Cancel·lar</NuxtLink>
           </UButton>
         </div>

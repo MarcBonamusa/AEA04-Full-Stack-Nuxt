@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
+import { FetchError } from 'ofetch'
 
 const { loggedIn, user, session, fetch, clear, openInPopup } = useUserSession();
 
@@ -49,11 +50,11 @@ watch(loggedIn, () => {
         </template>
         <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
             <UFormField label="Email" name="email">
-                <UInput v-model="state.email" />
+                <UInput v-model="state.email" class="w-full"/>
             </UFormField>
 
             <UFormField label="Password" name="password">
-                <UInput v-model="state.password" type="password" />
+                <UInput v-model="state.password" type="password" class="w-full"/>
             </UFormField>
 
             <UButton type="submit">

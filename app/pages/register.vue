@@ -6,36 +6,36 @@ import { FetchError } from 'ofetch'
 const { loggedIn, user, session, fetch, clear, openInPopup } = useUserSession();
 
 const schema = z.object({
-  name: z.string(), 
-  email: z.string().email('Invalid email'),
-  password: z.string().min(8, 'Must be at least 8 characters')
+    name: z.string(),
+    email: z.string().email('Invalid email'),
+    password: z.string().min(8, 'Must be at least 8 characters')
 })
 
 type Schema = z.output<typeof schema>
 
 const state = reactive<Partial<Schema>>({
-  name: undefined,
-  email: undefined,
-  password: undefined
+    name: undefined,
+    email: undefined,
+    password: undefined
 })
 
 const toast = useToast()
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  console.log(event.data)
-  try {
-    await $fetch('/auth/register', {
-        method: 'POST',
-        body: event.data
-    })
-    toast.add({ title: 'Success', description: 'The form has been submitted.', color: 'success' })
-    fetch()
-  } catch (error) {
-    if (error instanceof FetchError) {
-        toast.add({ title: 'Error', description: error.data.message, color: 'error' })
-    } else {
-        toast.add({ title: 'Error', description: "Error a l'aplicació", color: 'error' })
+    console.log(event.data)
+    try {
+        await $fetch('/auth/register', {
+            method: 'POST',
+            body: event.data
+        })
+        toast.add({ title: 'Success', description: 'The form has been submitted.', color: 'success' })
+        fetch()
+    } catch (error) {
+        if (error instanceof FetchError) {
+            toast.add({ title: 'Error', description: error.data.message, color: 'error' })
+        } else {
+            toast.add({ title: 'Error', description: "Error a l'aplicació", color: 'error' })
+        }
     }
-  }
 }
 
 watch(loggedIn, () => {
@@ -55,9 +55,9 @@ watch(loggedIn, () => {
             <UFormField label="Nom" name="name">
                 <UInput v-model="state.name" class="w-full" />
             </UFormField>
-            
+
             <UFormField label="Email" name="email">
-                <UInput v-model="state.email" class="w-full"/>
+                <UInput v-model="state.email" class="w-full" />
             </UFormField>
 
             <UFormField label="Password" name="password">
