@@ -47,7 +47,7 @@ async function eliminarGolejador(id) {
               <NuxtLink :to="`/modificar?id=${jugador.id}`">Modificar</NuxtLink>
             </UButton>
 
-            <UButton icon="i-heroicons-trash" style="cursor: pointer;"
+            <UButton icon="i-heroicons-trash" style="cursor: pointer; background-color: red;"
               @click="eliminarGolejador(jugador.id)" />
           </div>
 

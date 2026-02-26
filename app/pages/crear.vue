@@ -64,7 +64,7 @@ async function onSubmit(event) {
           </UButton>
 
           <UButton as-child class="flex-1 justify-center">
-            <NuxtLink to="/admin">Cancel·lar</NuxtLink>
+            <NuxtLink to="/admin" style="background-color: red;">Cancel·lar</NuxtLink>
           </UButton>
         </div>
 
