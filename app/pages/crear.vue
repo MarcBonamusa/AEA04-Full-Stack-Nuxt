@@ -40,18 +40,18 @@ async function onSubmit(event) {
   <div class="p-6">
     <UCard class="max-w-md mx-auto my-10">
       
-      <template #header>
+      <template>
         <h1 class="text-2xl text-center font-bold">Crear Golejador</h1>
       </template>
 
       <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
         
         <UFormField label="Nom" name="name">
-          <UInput v-model="state.name" class="w-full" placeholder="Ex: Leo Messi" />
+          <UInput v-model="state.name" class="w-full" placeholder="Ex: Lamine Yamal" />
         </UFormField>
         
         <UFormField label="Equip" name="team">
-          <UInput v-model="state.team" class="w-full" placeholder="Ex: Inter Miami" />
+          <UInput v-model="state.team" class="w-full" placeholder="Ex: FC Barcelona" />
         </UFormField>
 
         <UFormField label="Gols totals" name="goals">
