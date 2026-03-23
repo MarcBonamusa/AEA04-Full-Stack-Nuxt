@@ -3,57 +3,59 @@ import { golejadors } from "../db/schema";
 import { eq, and } from "drizzle-orm";
 
 export default defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event);
-  const userId = Number(user.id);
+  setResponseHeaders(event, {
+    'Access-Control-Allow-Origin': 'http://localhost:9000',
+    'Access-Control-Allow-Credentials': 'true',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, Authorization',
+  })
 
-  const method = event.method;
-
-  if (method === 'GET') {
-    return await db.select()
-      .from(golejadors)
-      .where(eq(golejadors.userId, userId));
+  if (event.method === 'OPTIONS') {
+    event.node.res.statusCode = 204
+    event.node.res.end()
+    return
   }
 
-  if (method === 'POST') {
-    const body = await readBody(event);
+  try {
+    const { user } = await requireUserSession(event);
+    const userId = Number(user.id);
+    const method = event.method;
 
-    return await db.insert(golejadors).values({
-      name: body.name,
-      team: body.team,
-      goals: Number(body.goals),
-      userId: userId,
-    }).returning();
-  }
+    if (method === 'GET') {
+      return await db.select()
+        .from(golejadors)
+        .where(eq(golejadors.userId, userId));
+    }
 
-  if (method === 'PUT') {
-    const query = getQuery(event);
-    const idToUpdate = Number(query.id);
-    const body = await readBody(event);
-
-    await db.update(golejadors)
-      .set({
+    if (method === 'POST') {
+      const body = await readBody(event);
+      return await db.insert(golejadors).values({
         name: body.name,
         team: body.team,
-        goals: Number(body.goals)
-      })
-      .where(and(
-        eq(golejadors.id, idToUpdate),
-        eq(golejadors.userId, userId)
-      ));
+        goals: Number(body.goals),
+        userId: userId,
+      }).returning();
+    }
 
-    return { message: "Modificat correctament" };
-  }
+    if (method === 'PUT') {
+      const idToUpdate = Number(event.context.params?.id || getQuery(event).id);
+      const body = await readBody(event);
+      await db.update(golejadors)
+        .set({ name: body.name, team: body.team, goals: Number(body.goals) })
+        .where(and(eq(golejadors.id, idToUpdate), eq(golejadors.userId, userId)));
+      return { message: "Modificat" };
+    }
 
-  if (method === 'DELETE') {
-    const query = getQuery(event);
-    const idToDelete = Number(query.id);
-
-    await db.delete(golejadors)
-      .where(and(
-        eq(golejadors.id, idToDelete),
-        eq(golejadors.userId, userId)
-      ));
-
-    return { message: "Eliminat" };
+    if (method === 'DELETE') {
+      const idToDelete = Number(event.context.params?.id || getQuery(event).id);
+      await db.delete(golejadors)
+        .where(and(eq(golejadors.id, idToDelete), eq(golejadors.userId, userId)));
+      return { message: "Eliminat" };
+    }
+  } catch (error) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Sessió no vàlida o error de servidor"
+    });
   }
 });
