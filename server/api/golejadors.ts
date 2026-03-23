@@ -47,9 +47,18 @@ export default defineEventHandler(async (event) => {
     }
 
     if (method === 'DELETE') {
-      const idToDelete = Number(event.context.params?.id || getQuery(event).id);
+      const idToDelete = Number(getQuery(event).id);
+
+      if (!idToDelete) {
+        throw createError({ statusCode: 400, message: "Falta el ID" });
+      }
+
       await db.delete(golejadors)
-        .where(and(eq(golejadors.id, idToDelete), eq(golejadors.userId, userId)));
+        .where(and(
+          eq(golejadors.id, idToDelete),
+          eq(golejadors.userId, userId)
+        ));
+
       return { message: "Eliminat" };
     }
   } catch (error) {
