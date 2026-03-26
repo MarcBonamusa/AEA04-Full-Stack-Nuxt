@@ -1,24 +1,27 @@
+import jwt from 'jsonwebtoken';
 import { db } from "../db";
 import { golejadors } from "../db/schema";
 import { eq, and } from "drizzle-orm";
 
 export default defineEventHandler(async (event) => {
-  setResponseHeaders(event, {
-    'Access-Control-Allow-Origin': 'http://localhost:9000',
-    'Access-Control-Allow-Credentials': 'true',
-    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, Authorization',
-  })
-
   if (event.method === 'OPTIONS') {
-    event.node.res.statusCode = 204
-    event.node.res.end()
-    return
+    event.node.res.statusCode = 204;
+    event.node.res.end();
+    return;
   }
 
   try {
-    const { user } = await requireUserSession(event);
-    const userId = Number(user.id);
+    const authHeader = getRequestHeader(event, 'authorization');
+    
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      throw createError({ statusCode: 401, message: "Falta el token JWT o el format és incorrecte" });
+    }
+
+    const token = authHeader.split(' ')[1];
+
+    const decoded = jwt.verify(token, 'MI_CLAVE_SECRETA_SUPER_SEGURA') as { id: number, email: string };
+    
+    const userId = Number(decoded.id);
     const method = event.method;
 
     if (method === 'GET') {
@@ -64,7 +67,7 @@ export default defineEventHandler(async (event) => {
   } catch (error) {
     throw createError({
       statusCode: 401,
-      statusMessage: "Sessió no vàlida o error de servidor"
+      statusMessage: "Sessió no vàlida, token caducat o error de servidor"
     });
   }
 });

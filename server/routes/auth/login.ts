@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 import { eq } from "drizzle-orm";
 
 export default defineEventHandler(async (event) => {
@@ -33,9 +34,14 @@ export default defineEventHandler(async (event) => {
 
   const { password: repassword, ...userWithOutPassword } = existingUser
 
-  await setUserSession(event, {
-    user: userWithOutPassword
-  })
+  const token = jwt.sign(
+    { id: existingUser.id, email: existingUser.email },
+    'MI_CLAVE_SECRETA_SUPER_SEGURA',
+    { expiresIn: '7d' }
+  );
 
-  return userWithOutPassword
+  return {
+    token: token,
+    user: userWithOutPassword
+  };
 });
